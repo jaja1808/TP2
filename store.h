@@ -1,5 +1,3 @@
-#include "product.h"
-#include "client.h"
 #include "order.h"
 #include <iostream>
 
@@ -22,30 +20,34 @@ public:
 
      //getters
 
-     friend std::ostream& operator<<(std::ostream& os, const Product& p);
-     friend std::ostream& operator<<(std::ostream& os, const Client& c);
-     friend std::ostream& operator<<(std::ostream& os, const Order& o);
-    //  friend std::ostream& operator+(std::ostream& os, const Product& p);
-
-     void getClients ();
-     void getProducts();
-     void getOrders();
+     void displayClients ();
+     void displayProducts();
+     void dispalyOrders();
+     void displayThisClient(std::string Id);
      std::string getStoreName();
+     std::vector<Product> getProductsList();
+     std::vector<Client> getClientsList();
+     std::vector<Order> getOrdersList();
 
      //setters
 
      void setStoreName(std::string name);
-     void addClients(Client c);
-     void addProducts(Product p);
-     void addOrders(Order o);
-     void displayProduct(std::string name);
-     void displayClient(std::string Id);
-
-     
-     void changeAvailablePct(Product& p, int availlable);
-     void addPctToCntPnr(Client& c,Product& p);
-     void removePctToCntPnr(Client& c,Product& p);
-     void changeqtyPctInCntPnr(Client& c,Product& p, int quantity);
+     void addClients(Client& c);
+     void newClientInStore(  std::string name,std::string prenom,std::string Id,std::string nameProd);
+     void newProdInStore( std::string name,std::string Descr,float cost,int quant);
+     void newOrderLinkPanier(std::string Id);
+     void newOrderNewPr(std::string name,std::string Id);
+     void addProducts(Product& p);
+     void addOrders(Order& o);
+     void validateOrder(std::string Id);
+     void changeStOrd(std::string Id,std::string stat);
+     Product& getProduct(std::string name);
+     Client& getClient(std::string Id);
+     Order &getOrderByClntId(std::string Id);
+     void changeAvailablePct(std::string name, int availlable);
+     void addPctToCntPnr(std::string Id,std::string name);
+     void removePctToCntPnr(std::string Id,std::string name);
+     void changeqtyPctInCntPnr(std::string Id,std::string name, int quantity);
      
 
 };

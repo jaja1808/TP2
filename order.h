@@ -16,7 +16,7 @@ private:
     /* data */
     Client _client;
     std::vector <Product> _chosenProducts;
-    Status _status; 
+    Status _status;
 
 public:
 
@@ -24,21 +24,24 @@ public:
            std::vector <Product> chosenProducts = {Product ()},
            Status status = Not_Delivered );
 
-      //getters
+   //getters
 
    Client getClient() const;
-   friend std::ostream& operator<<(std::ostream& os, const Product& p); 
-   friend std::ostream& operator<<(std::ostream& os, const Client& c);
+   void displayClient();
+   friend std::ostream& operator<<(std::ostream& os, const Order& o);
 
-   void getProductList();
+   void displayProductList();
    void getStatus() const;
 
    // setters
 
-   void setStatus(Status s);
-   void addProducts(Product p);
+   void setStatus(std::string stat);
+   void linkProducts();
+   void addProducts(Product &p);
+   void addProductsFromPanier(std::string name);
    void validOrder();
-  
+   void setClient(Client& c);
+   Product& findProductByName(std::string name);
 };
 
 // bool isValidOrder(Order o);

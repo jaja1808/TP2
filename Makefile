@@ -2,7 +2,7 @@ CXX        = g++
 CXXFLAGS   = -Wall  -std=c++20
 DEPFLAGS   = -MMD
 LDFLAGS    =
-SRCS       = client.cpp main.cpp store.cpp product.cpp order.cpp
+SRCS       = client.cpp main.cpp store.cpp product.cpp order.cpp App.cpp
 OBJS       = $(SRCS:.cpp=.o)
 TARGET     = app
 DEPS	   = $(OBJS:.o=.d)

@@ -28,30 +28,28 @@ public:
     std::string getName() const;
     std::string getPrenom() const;
     std::string getId() const;
-
-    friend std::ostream& operator<<(std::ostream& os, const Product& p);
-    void getPanier() const;
+    std::vector<Product> getPanier() const;
+    void displayPanier() const;
 
     //setters
 
     void setname(std::string name);
     void setprenom(std::string prenom);
     void setId(std::string id);
+    void setPanier(std::vector<Product> panier);
     friend std::ostream& operator<<(std::ostream& os, const Client& c);
-    friend bool operator==(Product& p, std::vector <Product>& _panier); // probation
 
     //helpers
 
-    void addPanier(Product p);
-    void removePanier(Product p);
+    void addPanier(Product& p);
+    void removePanier(std::string name);
+    void delProductProd(std::string name);
     void emptyPanier();
-    void findProduct(Product& p);
-    int countTheOccurance(Product& p);
-    void changeProdQtyinPnr(Product& p, int qty);
-    void findByName(std::string name);
-
+    int countTheOccurance(std::string name);
+    void changeProdQtyinPnr(std::string name, int qty);
+    Product& findByName(std::string name);
 };
  
- void getTheClient(Client c);
+ void getTheClient(Client& c);
 
 #endif //_CLIENT

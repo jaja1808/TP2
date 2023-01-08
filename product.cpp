@@ -8,6 +8,15 @@ Product::Product( std::string title,
                   float amount):_title(title),_description(description),_available(available),_amount(amount){
                   }
 
+//Friend
+
+std::ostream& operator << (std::ostream& os,const Product& p){
+     //parameters to be displayed
+   os << p.getTitle() <<","<< p.getAvailable() <<","<< p.getAmount()<<","<<p.getDescr();
+   return os;
+}
+
+
 //getters 
 
 std::string Product::getTitle() const{
@@ -56,13 +65,4 @@ void Product::incrAvailable(){
      if(_available >= 0){
     _available += 1;
    }
-}
-
-inline std::ostream& operator << (std::ostream& os,const Product& p){
-   os << p.getTitle() <<","<< p.getAvailable() <<","<< p.getAmount();
-   return os;
-}
-
-void getProduct(Product p){
-    std::cout << p << std::endl;
 }

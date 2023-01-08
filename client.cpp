@@ -1,6 +1,7 @@
 #include "client.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 // constructor
 
@@ -10,18 +11,19 @@ Client::Client(std::string name, std::string prenom, std::string id, std::vector
 
 // OVERLOADING
 
-// ==
-bool operator==(Product &p, std::vector<Product> &_panier){ 
-  return true;
-}
-// Overloading output of product
-inline std::ostream& operator << (std::ostream& os,const Product& p){
-   os << p.getTitle() <<","<< p.getAvailable() <<","<< p.getAmount();
-   return os;
-}
-// Overloading output of client
-inline std::ostream &operator<<(std::ostream &os, const Client &c){
-    os<< c.getName() << " " << c.getPrenom() << " " << c.getId() << std::endl;
+// // ==
+// bool operator==(Product &p, std::vector<Product> &_panier){ 
+//   return true;
+// }
+
+// Overloading output of Client
+
+std::ostream &operator<<(std::ostream &os, const Client &c){
+     //parameters to be displayed
+    os<< c.getName() << " " << c.getPrenom() << " " << c.getId()  << std::endl;
+    for (auto it=c._panier.begin(); it!=c._panier.end(); it++){
+        os << *it << std::endl;
+    }
     return os;
 }
 
@@ -39,9 +41,13 @@ std::string Client::getId() const{
     return _id;
 }
 
-void Client::getPanier() const{
-   for (auto it=_panier.begin(); it!=_panier.end(); it++){
-    std::cout<< *it << std::endl;
+std::vector<Product> Client::getPanier() const{
+    return _panier;
+}
+
+void Client::displayPanier() const{
+  for (auto it=_panier.begin(); it!=_panier.end(); it++){
+        std::cout << *it << std::endl;
     }
 }
 
@@ -59,28 +65,42 @@ void Client::setId(std::string id){
     _id = id;
 }
 
-void Client::addPanier(Product p){
+void Client::setPanier(std::vector<Product> panier){
+    _panier = panier;
+}
+
+void Client::addPanier(Product& p){
     if(p.getAvailable() != 0){
     _panier.push_back(p);
-    p.decrAvailable();
+     p.decrAvailable();
     }
 }
 
-void Client::removePanier(Product p){   // waramvunnye
+void Client::removePanier(std::string name){   // waramvunnye
      int index= -1;
-   for (int a = 0; a < _panier.size(); a++) {
+   for (int a = 0; a < (int)_panier.size(); a++) {
          Product& q=_panier.at(a);
-        if (q.getTitle() == p.getTitle()) {
+        if (q.getTitle() == findByName(name).getTitle()) {
         index = a;
         break;
     }
   }
        if (index != -1) {
           _panier.erase(_panier.begin() + index);
-          p.incrAvailable();
+          findByName(name).incrAvailable();
        }
 }
 
+void Client::delProductProd(std::string name){
+  for (int a = 0; a < (int) _panier.size(); a++) {       
+        if (_panier.at(a).getTitle() == name ) {
+       _panier.erase(_panier.begin() + a);
+        break;
+    }else{
+    throw std::runtime_error("Product not found");
+  }  
+ }
+}
 
 void Client::emptyPanier(){
     for (auto it=_panier.begin(); it!=_panier.end(); it++){
@@ -89,56 +109,50 @@ void Client::emptyPanier(){
     }
 }
 
-void Client::findProduct(Product& p){
-  for (auto it=_panier.begin(); it!=_panier.end(); it++){
-    Product q = *it ;
-    if (p.getTitle()== q.getTitle()){
-        std::cout << q <<std::endl;
-    }
-  }
-}
-
-int Client::countTheOccurance(Product &p){
+int Client::countTheOccurance(std::string name){
     int count = 0;
   for (auto it=_panier.begin(); it!=_panier.end(); it++){
     Product q = *it ;
-    if (p.getTitle()== q.getTitle()){
+    if (findByName(name).getTitle()== q.getTitle()){
         count ++;
     }
+    q.setAvailable(q.getAvailable() - count);
   }
   return count;
 }
 
-void Client::changeProdQtyinPnr(Product &p, int qty){
+void Client::changeProdQtyinPnr(std::string name, int qty){
 
- if(p.getAvailable() >= qty){
-   if(countTheOccurance(p)<qty){ 
-   while (countTheOccurance(p) <= qty ){
-      addPanier(p);
-      p.decrAvailable();
+ if(findByName(name).getAvailable() >= qty){
+   if(countTheOccurance(name)<qty){ 
+   while (countTheOccurance(name) <= qty ){
+      addPanier(findByName(name));
+      findByName(name).decrAvailable();
      }
     }
    }else{
-    std::cout <<"Please we have: "<<p.getAvailable()<<" products remaing"<<std::endl;
+    std::cout <<"Please we have: "<< findByName(name).getAvailable()<<" "<< findByName(name).getTitle()<<" remaining"<<std::endl;
   }
 
-   if(countTheOccurance(p)>qty){ 
-   while (countTheOccurance(p) > qty ){
-    removePanier(p);
-    p.incrAvailable();
+   if(countTheOccurance(name)>qty){ 
+   while (countTheOccurance(name) > qty ){
+    removePanier(name);
+    findByName(name).incrAvailable();
     }
    }
 }
-void Client::findByName(std::string name){
-   for (auto it=_panier.begin(); it!=_panier.end(); it++){
-    Product q = *it ;
-    if (q.getTitle()==name){
-       std::cout << q <<std::endl; 
-    }
-   }      
+
+Product& Client::findByName(std::string name){
+  auto it = std::find_if(_panier.begin(), _panier.end(), 
+    [&name](const Product& p){return p.getTitle() == name;});
+
+    return *it;
+    if (it == _panier.end()) {
+    throw std::runtime_error("Product not found");
+  }
 }
 
-void getTheClient(Client c){
+void getTheClient(Client& c){
     std::cout<< c << std::endl;
     c.getPanier();
 }

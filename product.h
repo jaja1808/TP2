@@ -15,10 +15,10 @@ private:
    float _amount;
 
 public:
-    Product( std::string _title ="Jata",
-             std::string _description = "yiwivvyvv",
-             int _available = 12,
-             float _amount =12.45);
+    Product( std::string title ="Jata",
+             std::string description = "yiwivvyvv",
+             int available = 12,
+             float amount =12.45);
 
     //getters
 
@@ -41,7 +41,6 @@ public:
     void decrAvailable(); 
     void incrAvailable();
 };
-
-  void getProduct(Product p);
+ 
 
 #endif //PRODUCT
